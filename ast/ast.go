@@ -47,6 +47,19 @@ func (f *File) Merge(other *File) error {
 	return nil
 }
 
+func (f *File) Clone() *File {
+	lines := make([]*Line, len(f.Lines))
+	for i, line := range f.Lines {
+		lines[i] = &Line{
+			Key:         line.Key,
+			RawValue:    line.RawValue,
+			QuotedValue: line.QuotedValue,
+			RawComment:  line.RawComment,
+		}
+	}
+	return &File{Lines: lines}
+}
+
 func (f *File) Values() map[string]string {
 	m := make(map[string]string)
 	for _, line := range f.Lines {
