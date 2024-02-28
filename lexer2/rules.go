@@ -17,10 +17,7 @@ func lex(l *Lexer) stateFn {
 			return lex
 		case l.char == '#':
 			return lexComment
-		case isChar(l.char):
-			return lexIdentifier
 		default:
-			// l.errorf("unexpected character at %s:%d:%d", l.name, l.line, l.col)
 			return lexText
 		}
 	}
@@ -51,9 +48,13 @@ func lexIdentifier(l *Lexer) stateFn {
 }
 
 func lexText(l *Lexer) stateFn {
+	switch {
+	case isDigit(l.char) || l.char == '=':
+	}
 	for {
 		ch := l.next()
 		switch {
+		case !isChar(ch):
 		case isNewLine(ch) || ch == '=' || ch == '#' || ch == '"' || ch == '\'' || ch == eof:
 			l.backup()
 			l.emit(TEXT)
@@ -102,6 +103,6 @@ func isChar(char rune) bool {
 	return char >= 'a' && char <= 'z' || char >= 'A' && char <= 'Z'
 }
 
-func isNumber(char rune) bool {
+func isDigit(char rune) bool {
 	return char >= '0' && char <= '9'
 }

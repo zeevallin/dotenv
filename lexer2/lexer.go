@@ -114,6 +114,14 @@ func (l *Lexer) accept(valid string) bool {
 	return false
 }
 
+func (l *Lexer) reject(invalid string) bool {
+	if strings.ContainsRune(invalid, l.next()) {
+		l.backup()
+		return true
+	}
+	return false
+}
+
 // acceptRun consumes a run of runes from the valid set.
 func (l *Lexer) acceptRun(valid string) {
 	for strings.ContainsRune(valid, l.next()) {
